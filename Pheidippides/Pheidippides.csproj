@@ -4,9 +4,16 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Inanna\Inanna\Inanna.csproj" />
+    <ProjectReference
+      Include="..\..\Inanna\Inanna.SourceGenerator\Inanna.SourceGenerator.csproj"
+      ReferenceOutputAssembly="false"
+      OutputItemType="Analyzer"
+    />
+    <ProjectReference Include="..\..\Rooster\Rooster.Contract\Rooster.Contract.csproj" />
   </ItemGroup>
 </Project>

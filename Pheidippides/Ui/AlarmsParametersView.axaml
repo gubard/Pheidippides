@@ -6,5 +6,47 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Pheidippides.Ui.AlarmsParametersView"
              x:DataType="ui:AlarmsParametersViewModel">
-    Welcome to Avalonia!
+    <StackPanel>
+        <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditName}">
+            <ToggleSwitch.OffContent>
+                <TextBlock Text="{StaticResource Lang.Name}" />
+            </ToggleSwitch.OffContent>
+            <ToggleSwitch.OnContent>
+                <TextBlock Text="{StaticResource Lang.Name}" />
+            </ToggleSwitch.OnContent>
+        </ToggleSwitch>
+
+        <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.Name}" />
+        <TextBox x:Name="NameTextBox" Text="{Binding Name}" />
+
+        <StackPanel Classes="horizontal">
+            <StackPanel>
+                <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditDueDate}">
+                    <ToggleSwitch.OffContent>
+                        <TextBlock Text="{StaticResource Lang.DueDate}" />
+                    </ToggleSwitch.OffContent>
+                    <ToggleSwitch.OnContent>
+                        <TextBlock Text="{StaticResource Lang.DueDate}" />
+                    </ToggleSwitch.OnContent>
+                </ToggleSwitch>
+
+                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.DueDate}" />
+                <CalendarDatePicker SelectedDate="{Binding DueDate}" />
+            </StackPanel>
+
+            <StackPanel>
+                <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditDueTime}">
+                    <ToggleSwitch.OffContent>
+                        <TextBlock Text="{StaticResource Lang.DueTime}" />
+                    </ToggleSwitch.OffContent>
+                    <ToggleSwitch.OnContent>
+                        <TextBlock Text="{StaticResource Lang.DueTime}" />
+                    </ToggleSwitch.OnContent>
+                </ToggleSwitch>
+
+                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.DueTime}" />
+                <TimePicker SelectedTime="{Binding DueTime}" ClockIdentifier="24HourClock" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

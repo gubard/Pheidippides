@@ -3,19 +3,38 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Pheidippides.Ui"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:h="clr-namespace:Pheidippides.Helpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Pheidippides.Ui.AlarmsView"
              x:DataType="ui:AlarmsViewModel">
-    <Grid>
-    <ItemsControl ItemsSource="{Binding Alarms}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <StackPanel>
-                    <TextBlock Classes="text-wrap" Text="{Binding Name}" />
-                    <TextBlock Classes="small" Text="{Binding DueDateTime}" />
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <Grid RowDefinitions="*,Auto">
+        <ItemsControl ItemsSource="{Binding Alarms}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Classes="text-wrap" Text="{Binding Name}" />
+                            <TextBlock Classes="small" Text="{Binding DueDateTime}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="{ip:MaterialDesign Edit}"
+                                    Command="{x:Static h:PheidippidesCommands.ShowEditAlarmCommand}"
+                                    CommandParameter="{Binding}" />
+                            <Button Classes="danger"
+                                    Content="{ip:MaterialDesign Delete}"
+                                    Command="{x:Static h:PheidippidesCommands.ShowDeleteAlarmCommand}"
+                                    CommandParameter="{Binding}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Button Grid.Row="1"
+                Classes="align-stretch content-align-center h1"
+                Content="{StaticResource Lang.Create}"
+                Command="{x:Static h:PheidippidesCommands.ShowCreateAlarmCommand}" />
     </Grid>
 </UserControl>
