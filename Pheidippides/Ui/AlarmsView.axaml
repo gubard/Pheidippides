@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Pheidippides.Ui"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Pheidippides.Ui.AlarmsView"
+             x:DataType="ui:AlarmsViewModel">
+    <Grid>
+    <ItemsControl ItemsSource="{Binding Alarms}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel>
+                    <TextBlock Classes="text-wrap" Text="{Binding Name}" />
+                    <TextBlock Classes="small" Text="{Binding DueDateTime}" />
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    </Grid>
+</UserControl>
