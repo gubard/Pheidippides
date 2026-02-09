@@ -9,42 +9,42 @@
     <StackPanel>
         <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditName}">
             <ToggleSwitch.OffContent>
-                <TextBlock Text="{StaticResource Lang.Name}" />
+                <TextBlock Text="{DynamicResource Lang.Name}" />
             </ToggleSwitch.OffContent>
             <ToggleSwitch.OnContent>
-                <TextBlock Text="{StaticResource Lang.Name}" />
+                <TextBlock Text="{DynamicResource Lang.Name}" />
             </ToggleSwitch.OnContent>
         </ToggleSwitch>
 
-        <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.Name}" />
+        <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{DynamicResource Lang.Name}" />
         <TextBox x:Name="NameTextBox" Text="{Binding Name}" />
 
         <StackPanel Classes="horizontal">
             <StackPanel>
                 <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditDueDate}">
                     <ToggleSwitch.OffContent>
-                        <TextBlock Text="{StaticResource Lang.DueDate}" />
+                        <TextBlock Text="{DynamicResource Lang.DueDate}" />
                     </ToggleSwitch.OffContent>
                     <ToggleSwitch.OnContent>
-                        <TextBlock Text="{StaticResource Lang.DueDate}" />
+                        <TextBlock Text="{DynamicResource Lang.DueDate}" />
                     </ToggleSwitch.OnContent>
                 </ToggleSwitch>
 
-                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.DueDate}" />
+                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{DynamicResource Lang.DueDate}" />
                 <CalendarDatePicker SelectedDate="{Binding DueDate}" />
             </StackPanel>
 
             <StackPanel>
                 <ToggleSwitch IsVisible="{Binding IsShowEdit}" IsChecked="{Binding IsEditDueTime}">
                     <ToggleSwitch.OffContent>
-                        <TextBlock Text="{StaticResource Lang.DueTime}" />
+                        <TextBlock Text="{DynamicResource Lang.DueTime}" />
                     </ToggleSwitch.OffContent>
                     <ToggleSwitch.OnContent>
-                        <TextBlock Text="{StaticResource Lang.DueTime}" />
+                        <TextBlock Text="{DynamicResource Lang.DueTime}" />
                     </ToggleSwitch.OnContent>
                 </ToggleSwitch>
 
-                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{StaticResource Lang.DueTime}" />
+                <TextBlock Classes="field" IsVisible="{Binding !IsShowEdit}" Text="{DynamicResource Lang.DueTime}" />
                 <TimePicker SelectedTime="{Binding DueTime}" ClockIdentifier="24HourClock" />
             </StackPanel>
         </StackPanel>
