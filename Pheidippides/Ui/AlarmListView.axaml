@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Pheidippides.Ui"
+             xmlns:s="clr-namespace:Inanna.Services;assembly=Inanna"
+             xmlns:h="clr-namespace:Pheidippides.Helpers"
+             xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:c="clr-namespace:Inanna.Controls;assembly=Inanna"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Pheidippides.Ui.AlarmListView"
+             x:DataType="ui:AlarmListViewModel">
+    <StackPanel>
+        <TextBlock Classes="field" Text="{DynamicResource Lang.OrderBy}" />
+        <c:EnumSelectorControl SelectedEnum="{Binding OrderBy}" />
+
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                            <TextBlock Classes="text-wrap" Text="{Binding Name}" />
+                            <TextBlock Classes="small"
+                                       Text="{Binding DueDateTime, Converter={x:Static s:DateTimeOffsetToDateTimeConverter.Instance}}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="{ip:MaterialDesign Edit}"
+                                    Command="{x:Static h:PheidippidesCommands.ShowEditAlarmCommand}"
+                                    CommandParameter="{Binding}" />
+                            <Button Classes="danger"
+                                    Content="{ip:MaterialDesign Delete}"
+                                    Command="{x:Static h:PheidippidesCommands.ShowDeleteAlarmCommand}"
+                                    CommandParameter="{Binding}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>
