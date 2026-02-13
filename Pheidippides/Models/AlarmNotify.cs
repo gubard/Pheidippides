@@ -4,7 +4,7 @@ using Gaia.Services;
 
 namespace Pheidippides.Models;
 
-public partial class AlarmNotify : ObservableObject, IStaticFactory<Guid, AlarmNotify>
+public sealed partial class AlarmNotify : ObservableObject, IStaticFactory<Guid, AlarmNotify>
 {
     public AlarmNotify(Guid id)
     {
