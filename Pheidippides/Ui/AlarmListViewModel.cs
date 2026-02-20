@@ -15,7 +15,7 @@ using Pheidippides.Models;
 
 namespace Pheidippides.Ui;
 
-public sealed partial class AlarmListViewModel : ViewModelBase, IInitUi, ISaveUi
+public sealed partial class AlarmListViewModel : ViewModelBase, IInit, ISaveUi
 {
     public AlarmListViewModel(IAvaloniaReadOnlyList<AlarmNotify> alarms)
     {
@@ -49,7 +49,7 @@ public sealed partial class AlarmListViewModel : ViewModelBase, IInitUi, ISaveUi
         );
     }
 
-    public ConfiguredValueTaskAwaitable InitUiAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable InitAsync(CancellationToken ct)
     {
         Dispatcher.UIThread.Post(UpdateItems);
         _alarms.CollectionChanged += AlarmsCollectionChanged;
