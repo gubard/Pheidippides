@@ -12,7 +12,7 @@ using Pheidippides.Services;
 
 namespace Pheidippides.Ui;
 
-public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISaveUi
+public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
 {
     public AlarmsViewModel(
         IAppResourceService appResourceService,
@@ -41,7 +41,7 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISaveUi
         return InitUiCore(ct).ConfigureAwait(false);
     }
 
-    public ConfiguredValueTaskAwaitable SaveUiAsync(CancellationToken ct)
+    public ConfiguredValueTaskAwaitable SaveAsync(CancellationToken ct)
     {
         return SaveUiCore(ct).ConfigureAwait(false);
     }
@@ -58,6 +58,6 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISaveUi
     private async ValueTask SaveUiCore(CancellationToken ct)
     {
         await _objectStorage.SaveAsync(new AlarmsSettings { OrderBy = AlarmList.OrderBy }, ct);
-        await AlarmList.SaveUiAsync(ct);
+        await AlarmList.SaveAsync(ct);
     }
 }
