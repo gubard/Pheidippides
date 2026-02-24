@@ -37,8 +37,9 @@ public sealed class AlarmMemoryCache
     : MemoryCache<AlarmNotify, RoosterPostRequest, RoosterGetResponse>,
         IAlarmMemoryCache
 {
-    public AlarmMemoryCache()
+    public AlarmMemoryCache(IAlarmScheduler alarmScheduler)
     {
+        _alarmScheduler = alarmScheduler;
         _alarms = new();
     }
 
@@ -77,6 +78,10 @@ public sealed class AlarmMemoryCache
             {
                 Items.Remove(id);
             }
+
+            _alarmScheduler.UpdateAlarms(
+                _alarms.Select(x => new AlarmSchedulerItem(x.DueDateTime.LocalDateTime)).ToArray()
+            );
         });
 
         return TaskHelper.ConfiguredCompletedTask;
@@ -88,13 +93,19 @@ public sealed class AlarmMemoryCache
     )
     {
         Dispatcher.UIThread.Post(() =>
-            _alarms.UpdateOrder(source.Alarms.Select(Update).OrderBy(x => x.DueDateTime).ToArray())
-        );
+        {
+            _alarms.UpdateOrder(source.Alarms.Select(Update).OrderBy(x => x.DueDateTime).ToArray());
+
+            _alarmScheduler.UpdateAlarms(
+                _alarms.Select(x => new AlarmSchedulerItem(x.DueDateTime.LocalDateTime)).ToArray()
+            );
+        });
 
         return TaskHelper.ConfiguredCompletedTask;
     }
 
     private readonly AvaloniaList<AlarmNotify> _alarms;
+    private readonly IAlarmScheduler _alarmScheduler;
 
     private AlarmNotify Update(Alarm alarm)
     {

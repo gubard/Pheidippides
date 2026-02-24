@@ -28,7 +28,7 @@ public sealed partial class AlarmsParametersViewModel : ParametersViewModelBase
         : base(validationMode, isShowEdit)
     {
         Name = string.Empty;
-        DueDate = DateTime.Now;
+        DueDate = DateTime.Now.Date;
         DueTime = DateTime.Now.TimeOfDay;
         ResetEdit();
     }
