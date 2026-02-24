@@ -69,6 +69,11 @@ public sealed class AlarmMemoryCache
                     {
                         item.Name = alarm.Name;
                     }
+
+                    if (alarm.IsEditIsCompleted)
+                    {
+                        item.IsCompleted = alarm.IsCompleted;
+                    }
                 }
             }
 
