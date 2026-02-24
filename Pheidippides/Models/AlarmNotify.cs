@@ -21,6 +21,9 @@ public sealed partial class AlarmNotify : ObservableObject, IStaticFactory<Guid,
     [ObservableProperty]
     private DateTimeOffset _dueDateTime;
 
+    [ObservableProperty]
+    private bool _isCompleted;
+
     public static AlarmNotify Create(Guid input)
     {
         return new(input);

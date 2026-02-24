@@ -79,9 +79,7 @@ public sealed class AlarmMemoryCache
                 Items.Remove(id);
             }
 
-            _alarmScheduler.UpdateAlarms(
-                _alarms.Select(x => new AlarmSchedulerItem(x.DueDateTime.LocalDateTime)).ToArray()
-            );
+            _alarmScheduler.UpdateAlarms(_alarms.Where(x => !x.IsCompleted).ToArray());
         });
 
         return TaskHelper.ConfiguredCompletedTask;
@@ -95,10 +93,7 @@ public sealed class AlarmMemoryCache
         Dispatcher.UIThread.Post(() =>
         {
             _alarms.UpdateOrder(source.Alarms.Select(Update).OrderBy(x => x.DueDateTime).ToArray());
-
-            _alarmScheduler.UpdateAlarms(
-                _alarms.Select(x => new AlarmSchedulerItem(x.DueDateTime.LocalDateTime)).ToArray()
-            );
+            _alarmScheduler.UpdateAlarms(_alarms.Where(x => !x.IsCompleted).ToArray());
         });
 
         return TaskHelper.ConfiguredCompletedTask;
