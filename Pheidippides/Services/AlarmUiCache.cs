@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
 using Gaia.Helpers;
@@ -50,7 +51,32 @@ public sealed class AlarmMemoryCache
         CancellationToken ct
     )
     {
-        Dispatcher.UIThread.Post(() =>
+        return UpdateCore(source, ct).ConfigureAwait(false);
+    }
+
+    public override ConfiguredValueTaskAwaitable UpdateAsync(
+        RoosterGetResponse source,
+        CancellationToken ct
+    )
+    {
+        return UpdateCore(source, ct).ConfigureAwait(false);
+    }
+
+    private readonly AvaloniaList<AlarmNotify> _alarms;
+    private readonly IAlarmScheduler _alarmScheduler;
+
+    private async ValueTask UpdateCore(RoosterGetResponse source, CancellationToken ct)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() =>
+            _alarms.UpdateOrder(source.Alarms.Select(Update).OrderBy(x => x.DueDateTime).ToArray())
+        );
+
+        await _alarmScheduler.UpdateAlarmsAsync(_alarms.Where(x => !x.IsCompleted).ToArray(), ct);
+    }
+
+    private async ValueTask UpdateCore(RoosterPostRequest source, CancellationToken ct)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
             _alarms.AddRange(source.Creates.Select(Update).ToArray());
 
@@ -83,29 +109,10 @@ public sealed class AlarmMemoryCache
             {
                 Items.Remove(id);
             }
-
-            _alarmScheduler.UpdateAlarms(_alarms.Where(x => !x.IsCompleted).ToArray());
         });
 
-        return TaskHelper.ConfiguredCompletedTask;
+        await _alarmScheduler.UpdateAlarmsAsync(_alarms.Where(x => !x.IsCompleted).ToArray(), ct);
     }
-
-    public override ConfiguredValueTaskAwaitable UpdateAsync(
-        RoosterGetResponse source,
-        CancellationToken ct
-    )
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            _alarms.UpdateOrder(source.Alarms.Select(Update).OrderBy(x => x.DueDateTime).ToArray());
-            _alarmScheduler.UpdateAlarms(_alarms.Where(x => !x.IsCompleted).ToArray());
-        });
-
-        return TaskHelper.ConfiguredCompletedTask;
-    }
-
-    private readonly AvaloniaList<AlarmNotify> _alarms;
-    private readonly IAlarmScheduler _alarmScheduler;
 
     private AlarmNotify Update(Alarm alarm)
     {

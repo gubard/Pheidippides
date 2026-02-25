@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform;
@@ -15,12 +16,21 @@ namespace Pheidippides.Services;
 
 public interface IAlarmScheduler
 {
-    void UpdateAlarms(params Span<AlarmNotify> items);
+    ConfiguredValueTaskAwaitable UpdateAlarmsAsync(
+        ReadOnlySpan<AlarmNotify> items,
+        CancellationToken ct
+    );
 }
 
 public sealed class EmptyAlarmScheduler : IAlarmScheduler
 {
-    public void UpdateAlarms(params Span<AlarmNotify> items) { }
+    public ConfiguredValueTaskAwaitable UpdateAlarmsAsync(
+        ReadOnlySpan<AlarmNotify> items,
+        CancellationToken ct
+    )
+    {
+        return TaskHelper.ConfiguredCompletedTask;
+    }
 }
 
 public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
@@ -42,7 +52,10 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
         _soundData = memoryStream.ToArray();
     }
 
-    public void UpdateAlarms(params Span<AlarmNotify> items)
+    public ConfiguredValueTaskAwaitable UpdateAlarmsAsync(
+        ReadOnlySpan<AlarmNotify> items,
+        CancellationToken ct
+    )
     {
         foreach (var cts in _ctsMap)
         {
@@ -56,6 +69,8 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
         {
             CreateTask(item);
         }
+
+        return TaskHelper.ConfiguredCompletedTask;
     }
 
     public void Dispose()
