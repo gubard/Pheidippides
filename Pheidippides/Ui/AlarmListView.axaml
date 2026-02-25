@@ -17,23 +17,25 @@
         <ItemsControl ItemsSource="{Binding Items}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel>
-                            <TextBlock Classes="text-wrap" Text="{Binding Name}" />
-                            <TextBlock Classes="small"
-                                       Text="{Binding DueDateTime, Converter={x:Static s:DateTimeOffsetToDateTimeConverter.Instance}}" />
-                        </StackPanel>
+                    <Border Classes="item">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel>
+                                <TextBlock Classes="text-wrap" Text="{Binding Name}" />
+                                <TextBlock Classes="small"
+                                           Text="{Binding DueDateTime, Converter={x:Static s:DateTimeOffsetToDateTimeConverter.Instance}}" />
+                            </StackPanel>
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <Button Content="{ip:MaterialDesign Edit}"
-                                    Command="{x:Static h:PheidippidesCommands.ShowEditAlarmCommand}"
-                                    CommandParameter="{Binding}" />
-                            <Button Classes="danger"
-                                    Content="{ip:MaterialDesign Delete}"
-                                    Command="{x:Static h:PheidippidesCommands.ShowDeleteAlarmCommand}"
-                                    CommandParameter="{Binding}" />
-                        </StackPanel>
-                    </Grid>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="{ip:MaterialDesign Edit}"
+                                        Command="{x:Static h:PheidippidesCommands.ShowEditAlarmCommand}"
+                                        CommandParameter="{Binding}" />
+                                <Button Classes="danger"
+                                        Content="{ip:MaterialDesign Delete}"
+                                        Command="{x:Static h:PheidippidesCommands.ShowDeleteAlarmCommand}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
