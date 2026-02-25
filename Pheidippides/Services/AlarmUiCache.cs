@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
-using Gaia.Helpers;
 using Gaia.Services;
 using Inanna.Helpers;
 using Inanna.Services;
