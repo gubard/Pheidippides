@@ -52,7 +52,6 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
     {
         var settings = await _objectStorage.LoadAsync<AlarmsSettings>(ct);
         Dispatcher.UIThread.Post(() => AlarmList.OrderBy = settings.OrderBy);
-        await AlarmList.InitAsync(ct);
     }
 
     private async ValueTask SaveUiCore(CancellationToken ct)
