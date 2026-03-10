@@ -9,13 +9,13 @@ using Rooster.Contract.Services;
 namespace Pheidippides.Services;
 
 public sealed class AlarmHttpService(
-    HttpClient httpClient,
+    IFactory<HttpClient> httpClientFactory,
     JsonSerializerOptions options,
     ITryPolicyService tryPolicyService,
     IFactory<Memory<HttpHeader>> headersFactory
 )
     : HttpService<RoosterGetRequest, RoosterPostRequest, RoosterGetResponse, RoosterPostResponse>(
-        httpClient,
+        httpClientFactory,
         options,
         tryPolicyService,
         headersFactory
