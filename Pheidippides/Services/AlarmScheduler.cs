@@ -38,12 +38,16 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
     public DefaultAlarmScheduler(
         ISoundPlayer soundPlayer,
         IDialogService dialogService,
-        IAppResourceService appResourceService
+        IAppResourceService appResourceService,
+        ICommandFactory commandFactory,
+        ISafeExecuteWrapper safeExecuteWrapper
     )
     {
         _soundPlayer = soundPlayer;
         _dialogService = dialogService;
         _appResourceService = appResourceService;
+        _commandFactory = commandFactory;
+        _safeExecuteWrapper = safeExecuteWrapper;
 
         using var stream = AssetLoader.Open(new("avares://Sprava/Assets/Sounds/Alarm.wav"));
         using var memoryStream = new MemoryStream();
@@ -86,6 +90,8 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
     private readonly IDialogService _dialogService;
     private readonly IAppResourceService _appResourceService;
     private readonly ReadOnlyMemory<byte> _soundData;
+    private readonly ICommandFactory _commandFactory;
+    private readonly ISafeExecuteWrapper _safeExecuteWrapper;
 
     private async ValueTask CreateTask(AlarmNotify item)
     {
@@ -104,9 +110,10 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
                             .GetResource<string>("Lang.Alarm")
                             .DispatchToDialogHeader(),
                         item.Name,
+                        _safeExecuteWrapper,
                         new DialogButton(
                             _appResourceService.GetResource<string>("Lang.Ok"),
-                            UiHelper.CreateCommand(async c =>
+                            _commandFactory.CreateCommand(async c =>
                             {
                                 await cts.CancelAsync();
                                 await _dialogService.CloseMessageBoxAsync(c);

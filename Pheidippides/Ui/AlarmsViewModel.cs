@@ -18,10 +18,14 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
         IAppResourceService appResourceService,
         IAlarmUiCache alarmUiCache,
         IPheidippidesViewModelFactory factory,
-        IObjectStorage objectStorage
+        IObjectStorage objectStorage,
+        ISafeExecuteWrapper safeExecuteWrapper,
+        PheidippidesCommands pheidippidesCommands
     )
+        : base(safeExecuteWrapper)
     {
         _objectStorage = objectStorage;
+        PheidippidesCommands = pheidippidesCommands;
         ;
 
         Header = new TextBlock
@@ -35,6 +39,7 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
 
     public object Header { get; }
     public AlarmListViewModel AlarmList { get; }
+    public PheidippidesCommands PheidippidesCommands { get; }
 
     public ConfiguredValueTaskAwaitable InitAsync(CancellationToken ct)
     {

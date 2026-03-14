@@ -12,7 +12,9 @@ public sealed class AlarmUiService(
     IAlarmDbService toDoDbService,
     IAlarmUiCache uiCache,
     INavigator navigator,
-    string serviceName
+    string serviceName,
+    IStatusBarService statusBarService,
+    IInannaViewModelFactory factory
 )
     : UiService<
         RoosterGetRequest,
@@ -22,7 +24,7 @@ public sealed class AlarmUiService(
         IAlarmHttpService,
         IAlarmDbService,
         IAlarmUiCache
-    >(toDoHttpService, toDoDbService, uiCache, navigator, serviceName),
+    >(toDoHttpService, toDoDbService, uiCache, navigator, serviceName, statusBarService, factory),
         IAlarmUiService
 {
     protected override RoosterGetRequest CreateGetRequestRefresh()

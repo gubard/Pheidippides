@@ -12,18 +12,26 @@ using Inanna.Helpers;
 using Inanna.Models;
 using Inanna.Services;
 using Pheidippides.Models;
+using Pheidippides.Services;
 
 namespace Pheidippides.Ui;
 
 public sealed partial class AlarmListViewModel : ViewModelBase, IInit, ISave
 {
-    public AlarmListViewModel(IAvaloniaReadOnlyList<AlarmNotify> alarms)
+    public AlarmListViewModel(
+        IAvaloniaReadOnlyList<AlarmNotify> alarms,
+        ISafeExecuteWrapper safeExecuteWrapper,
+        PheidippidesCommands pheidippidesCommands
+    )
+        : base(safeExecuteWrapper)
     {
         _alarms = alarms;
+        PheidippidesCommands = pheidippidesCommands;
         _items = [];
     }
 
     public IAvaloniaReadOnlyList<AlarmNotify> Items => _items;
+    public PheidippidesCommands PheidippidesCommands { get; }
 
     [ObservableProperty]
     private AlarmsOrderBy _orderBy;

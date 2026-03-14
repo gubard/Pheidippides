@@ -2,6 +2,7 @@ using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inanna.Generator;
 using Inanna.Models;
+using Inanna.Services;
 using Inanna.Ui;
 using Pheidippides.Models;
 using Rooster.Contract.Models;
@@ -14,9 +15,10 @@ public sealed partial class AlarmsParametersViewModel : ParametersViewModelBase
     public AlarmsParametersViewModel(
         AlarmNotify item,
         ValidationMode validationMode,
-        bool isShowEdit
+        bool isShowEdit,
+        ISafeExecuteWrapper safeExecuteWrapper
     )
-        : base(validationMode, isShowEdit)
+        : base(validationMode, isShowEdit, safeExecuteWrapper)
     {
         DueDate = item.DueDateTime.LocalDateTime;
         DueTime = item.DueDateTime.TimeOfDay;
@@ -24,8 +26,12 @@ public sealed partial class AlarmsParametersViewModel : ParametersViewModelBase
         ResetEdit();
     }
 
-    public AlarmsParametersViewModel(ValidationMode validationMode, bool isShowEdit)
-        : base(validationMode, isShowEdit)
+    public AlarmsParametersViewModel(
+        ValidationMode validationMode,
+        bool isShowEdit,
+        ISafeExecuteWrapper safeExecuteWrapper
+    )
+        : base(validationMode, isShowEdit, safeExecuteWrapper)
     {
         var now = DateTime.Now;
         Name = string.Empty;

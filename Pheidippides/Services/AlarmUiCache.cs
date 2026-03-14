@@ -37,7 +37,8 @@ public sealed class AlarmMemoryCache
     : MemoryCache<AlarmNotify, RoosterPostRequest, RoosterGetResponse>,
         IAlarmMemoryCache
 {
-    public AlarmMemoryCache(IAlarmScheduler alarmScheduler)
+    public AlarmMemoryCache(IAlarmScheduler alarmScheduler, IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
         _alarmScheduler = alarmScheduler;
         _alarms = new();

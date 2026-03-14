@@ -1,10 +1,11 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Gaia.Services;
+using IServiceProvider = Gaia.Services.IServiceProvider;
 
 namespace Pheidippides.Models;
 
-public sealed partial class AlarmNotify : ObservableObject, IStaticFactory<Guid, AlarmNotify>
+public sealed partial class AlarmNotify : ObservableObject, IStaticServiceFactory<Guid, AlarmNotify>
 {
     public AlarmNotify(Guid id)
     {
@@ -24,7 +25,7 @@ public sealed partial class AlarmNotify : ObservableObject, IStaticFactory<Guid,
     [ObservableProperty]
     private bool _isCompleted;
 
-    public static AlarmNotify Create(Guid input)
+    public static AlarmNotify Create(Guid input, IServiceProvider serviceProvider)
     {
         return new(input);
     }

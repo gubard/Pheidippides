@@ -2,27 +2,27 @@ using System;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Gaia.Helpers;
 using Gaia.Services;
 using Inanna.Helpers;
 using Inanna.Models;
 using Inanna.Services;
 using Pheidippides.Models;
-using Pheidippides.Services;
 
-namespace Pheidippides.Helpers;
+namespace Pheidippides.Services;
 
-public static class PheidippidesCommands
+public sealed class PheidippidesCommands
 {
-    static PheidippidesCommands()
+    public PheidippidesCommands(
+        IDialogService dialogService,
+        IAppResourceService appResourceService,
+        IStringFormater stringFormater,
+        IPheidippidesViewModelFactory viewModelFactory,
+        IAlarmUiService alarmUiService,
+        ICommandFactory commandFactory,
+        ISafeExecuteWrapper safeExecuteWrapper
+    )
     {
-        var dialogService = DiHelper.ServiceProvider.GetService<IDialogService>();
-        var appResourceService = DiHelper.ServiceProvider.GetService<IAppResourceService>();
-        var stringFormater = DiHelper.ServiceProvider.GetService<IStringFormater>();
-        var viewModelFactory = DiHelper.ServiceProvider.GetService<IPheidippidesViewModelFactory>();
-        var alarmUiService = DiHelper.ServiceProvider.GetService<IAlarmUiService>();
-
-        ShowEditAlarmCommand = UiHelper.CreateCommand<AlarmNotify>(
+        ShowEditAlarmCommand = commandFactory.CreateCommand<AlarmNotify>(
             (item, ct) =>
             {
                 var parameters = viewModelFactory.CreateAlarmsParameters(item);
@@ -36,9 +36,10 @@ public static class PheidippidesCommands
                             )
                             .DispatchToDialogHeader(),
                         parameters,
+                        safeExecuteWrapper,
                         new(
                             appResourceService.GetResource<string>("Lang.Edit"),
-                            UiHelper.CreateCommand(async c =>
+                            commandFactory.CreateCommand(async c =>
                             {
                                 var edit = parameters.CreateEdit(item.Id);
                                 await dialogService.CloseMessageBoxAsync(c);
@@ -52,14 +53,14 @@ public static class PheidippidesCommands
                             null,
                             DialogButtonType.Primary
                         ),
-                        UiHelper.CancelButton
+                        dialogService.CancelButton
                     ),
                     ct
                 );
             }
         );
 
-        ShowCreateAlarmCommand = UiHelper.CreateCommand(ct =>
+        ShowCreateAlarmCommand = commandFactory.CreateCommand(ct =>
         {
             var parameters = viewModelFactory.CreateAlarmsParameters(
                 ValidationMode.ValidateAll,
@@ -75,9 +76,10 @@ public static class PheidippidesCommands
                         )
                         .DispatchToDialogHeader(),
                     parameters,
+                    safeExecuteWrapper,
                     new(
                         appResourceService.GetResource<string>("Lang.Create"),
-                        UiHelper.CreateCommand(async c =>
+                        commandFactory.CreateCommand(async c =>
                         {
                             var alarm = parameters.CreateAlarm(Guid.NewGuid());
                             await dialogService.CloseMessageBoxAsync(c);
@@ -91,13 +93,13 @@ public static class PheidippidesCommands
                         null,
                         DialogButtonType.Primary
                     ),
-                    UiHelper.CancelButton
+                    dialogService.CancelButton
                 ),
                 ct
             );
         });
 
-        ShowDeleteAlarmCommand = UiHelper.CreateCommand<AlarmNotify>(
+        ShowDeleteAlarmCommand = commandFactory.CreateCommand<AlarmNotify>(
             (item, ct) =>
             {
                 var header = appResourceService
@@ -117,9 +119,10 @@ public static class PheidippidesCommands
                                 Classes = { "text-wrap" },
                             }
                         ),
+                        safeExecuteWrapper,
                         new DialogButton(
                             appResourceService.GetResource<string>("Lang.Delete"),
-                            UiHelper.CreateCommand(async c =>
+                            commandFactory.CreateCommand(async c =>
                             {
                                 await dialogService.CloseMessageBoxAsync(c);
 
@@ -132,7 +135,7 @@ public static class PheidippidesCommands
                             null,
                             DialogButtonType.Primary
                         ),
-                        UiHelper.CancelButton
+                        dialogService.CancelButton
                     ),
                     ct
                 );
@@ -140,7 +143,7 @@ public static class PheidippidesCommands
         );
     }
 
-    public static readonly ICommand ShowDeleteAlarmCommand;
-    public static readonly ICommand ShowEditAlarmCommand;
-    public static readonly ICommand ShowCreateAlarmCommand;
+    public ICommand ShowDeleteAlarmCommand { get; }
+    public ICommand ShowEditAlarmCommand { get; }
+    public ICommand ShowCreateAlarmCommand { get; }
 }

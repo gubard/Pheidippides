@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 
 namespace Pheidippides.Ui;
 
@@ -8,4 +9,7 @@ public sealed partial class AlarmListView : UserControl
     {
         InitializeComponent();
     }
+
+    public AlarmListViewModel ViewModel =>
+        DataContext as AlarmListViewModel ?? throw new InvalidOperationException();
 }

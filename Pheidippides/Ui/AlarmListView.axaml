@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Pheidippides.Ui"
              xmlns:s="clr-namespace:Inanna.Services;assembly=Inanna"
-             xmlns:h="clr-namespace:Pheidippides.Helpers"
              xmlns:ip="https://github.com/MahApps/IconPacks.Avalonia"
              xmlns:c="clr-namespace:Inanna.Controls;assembly=Inanna"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -27,11 +26,11 @@
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <Button Content="{ip:MaterialDesign Edit}"
-                                        Command="{x:Static h:PheidippidesCommands.ShowEditAlarmCommand}"
+                                        Command="{Binding $parent[ui:AlarmListView].ViewModel.PheidippidesCommands.ShowEditAlarmCommand}"
                                         CommandParameter="{Binding}" />
                                 <Button Classes="danger"
                                         Content="{ip:MaterialDesign Delete}"
-                                        Command="{x:Static h:PheidippidesCommands.ShowDeleteAlarmCommand}"
+                                        Command="{Binding $parent[ui:AlarmListView].ViewModel.PheidippidesCommands.ShowDeleteAlarmCommand}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
                         </Grid>
