@@ -48,7 +48,7 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
 
     public ConfiguredValueTaskAwaitable SaveAsync(CancellationToken ct)
     {
-        return SaveUiCore(ct).ConfigureAwait(false);
+        return SaveCore(ct).ConfigureAwait(false);
     }
 
     private readonly IObjectStorage _objectStorage;
@@ -59,7 +59,7 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
         Dispatcher.UIThread.Post(() => AlarmList.OrderBy = settings.OrderBy);
     }
 
-    private async ValueTask SaveUiCore(CancellationToken ct)
+    private async ValueTask SaveCore(CancellationToken ct)
     {
         await _objectStorage.SaveAsync(new AlarmsSettings { OrderBy = AlarmList.OrderBy }, ct);
         await AlarmList.SaveAsync(ct);
