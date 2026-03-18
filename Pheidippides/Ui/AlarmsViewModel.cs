@@ -26,7 +26,6 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
     {
         _objectStorage = objectStorage;
         PheidippidesCommands = pheidippidesCommands;
-        ;
 
         Header = new TextBlock
         {
