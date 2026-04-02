@@ -1,4 +1,7 @@
-﻿using Inanna.Services;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Gaia.Services;
+using Inanna.Services;
 using Rooster.Contract.Models;
 using Rooster.Contract.Services;
 
@@ -27,8 +30,12 @@ public sealed class AlarmUiService(
     >(toDoHttpService, toDoDbService, uiCache, navigator, serviceName, statusBarService, factory),
         IAlarmUiService
 {
-    protected override RoosterGetRequest CreateGetRequestRefresh()
+    protected override async ValueTask<IValidationErrors> RefreshServiceCore(CancellationToken ct)
     {
-        return new() { IsGetAlarms = true };
+        var request = new RoosterGetRequest { IsGetAlarms = true };
+        var response = await DbService.GetAsync(request, ct);
+        await UiCache.UpdateAsync(response, ct);
+
+        return response;
     }
 }
