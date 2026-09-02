@@ -20,10 +20,10 @@ public sealed partial class AlarmListViewModel : ViewModelBase, IInit, ISave
 {
     public AlarmListViewModel(
         IAvaloniaReadOnlyList<AlarmNotify> alarms,
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         PheidippidesCommands pheidippidesCommands
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         _alarms = alarms;
         PheidippidesCommands = pheidippidesCommands;

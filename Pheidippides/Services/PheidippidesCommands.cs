@@ -28,34 +28,31 @@ public sealed class PheidippidesCommands
                 var parameters = viewModelFactory.CreateAlarmsParameters(item);
 
                 return dialogService.ShowMessageBoxAsync(
+                    stringFormater
+                        .Format(
+                            appResourceService.GetResource<string>("Lang.EditItem"),
+                            appResourceService.GetResource<string>("Lang.Alarm")
+                        )
+                        .DispatchToDialogHeader(),
+                    parameters,
+                    ct,
                     new(
-                        stringFormater
-                            .Format(
-                                appResourceService.GetResource<string>("Lang.EditItem"),
-                                appResourceService.GetResource<string>("Lang.Alarm")
-                            )
-                            .DispatchToDialogHeader(),
-                        parameters,
-                        safeExecuteWrapper,
-                        new(
-                            appResourceService.GetResource<string>("Lang.Edit"),
-                            commandFactory.CreateCommand(async c =>
-                            {
-                                var edit = parameters.CreateEdit(item.Id);
-                                await dialogService.CloseMessageBoxAsync(c);
+                        appResourceService.GetResource<string>("Lang.Edit"),
+                        commandFactory.CreateCommand(async c =>
+                        {
+                            var edit = parameters.CreateEdit(item.Id);
+                            await dialogService.CloseMessageBoxAsync(c);
 
-                                return await alarmUiService.PostAsync(
-                                    Guid.NewGuid(),
-                                    new() { Edits = [edit] },
-                                    c
-                                );
-                            }),
-                            null,
-                            DialogButtonType.Primary
-                        ),
-                        dialogService.CancelButton
+                            return await alarmUiService.PostAsync(
+                                Guid.NewGuid(),
+                                new() { Edits = [edit] },
+                                c
+                            );
+                        }),
+                        null,
+                        DialogButtonType.Primary
                     ),
-                    ct
+                    dialogService.CancelButton
                 );
             }
         );
@@ -68,34 +65,31 @@ public sealed class PheidippidesCommands
             );
 
             return dialogService.ShowMessageBoxAsync(
-                new(
-                    stringFormater
-                        .Format(
-                            appResourceService.GetResource<string>("Lang.Create"),
-                            appResourceService.GetResource<string>("Lang.Alarm")
-                        )
-                        .DispatchToDialogHeader(),
-                    parameters,
-                    safeExecuteWrapper,
-                    new(
+                stringFormater
+                    .Format(
                         appResourceService.GetResource<string>("Lang.Create"),
-                        commandFactory.CreateCommand(async c =>
-                        {
-                            var alarm = parameters.CreateAlarm(Guid.NewGuid());
-                            await dialogService.CloseMessageBoxAsync(c);
+                        appResourceService.GetResource<string>("Lang.Alarm")
+                    )
+                    .DispatchToDialogHeader(),
+                parameters,
+                ct,
+                new(
+                    appResourceService.GetResource<string>("Lang.Create"),
+                    commandFactory.CreateCommand(async c =>
+                    {
+                        var alarm = parameters.CreateAlarm(Guid.NewGuid());
+                        await dialogService.CloseMessageBoxAsync(c);
 
-                            return await alarmUiService.PostAsync(
-                                Guid.NewGuid(),
-                                new() { Creates = [alarm] },
-                                c
-                            );
-                        }),
-                        null,
-                        DialogButtonType.Primary
-                    ),
-                    dialogService.CancelButton
+                        return await alarmUiService.PostAsync(
+                            Guid.NewGuid(),
+                            new() { Creates = [alarm] },
+                            c
+                        );
+                    }),
+                    null,
+                    DialogButtonType.Primary
                 ),
-                ct
+                dialogService.CancelButton
             );
         });
 
@@ -107,37 +101,34 @@ public sealed class PheidippidesCommands
                     .DispatchToDialogHeader();
 
                 return dialogService.ShowMessageBoxAsync(
-                    new(
-                        header,
-                        Dispatcher.UIThread.Invoke(() =>
-                            new TextBlock
-                            {
-                                Text = stringFormater.Format(
-                                    appResourceService.GetResource<string>("Lang.AskDelete"),
-                                    item.Name
-                                ),
-                                Classes = { "text-wrap" },
-                            }
-                        ),
-                        safeExecuteWrapper,
-                        new DialogButton(
-                            appResourceService.GetResource<string>("Lang.Delete"),
-                            commandFactory.CreateCommand(async c =>
-                            {
-                                await dialogService.CloseMessageBoxAsync(c);
-
-                                return await alarmUiService.PostAsync(
-                                    Guid.NewGuid(),
-                                    new() { DeleteIds = [item.Id] },
-                                    c
-                                );
-                            }),
-                            null,
-                            DialogButtonType.Primary
-                        ),
-                        dialogService.CancelButton
+                    header,
+                    Dispatcher.UIThread.Invoke(() =>
+                        new TextBlock
+                        {
+                            Text = stringFormater.Format(
+                                appResourceService.GetResource<string>("Lang.AskDelete"),
+                                item.Name
+                            ),
+                            Classes = { "text-wrap" },
+                        }
                     ),
-                    ct
+                    ct,
+                    new DialogButton(
+                        appResourceService.GetResource<string>("Lang.Delete"),
+                        commandFactory.CreateCommand(async c =>
+                        {
+                            await dialogService.CloseMessageBoxAsync(c);
+
+                            return await alarmUiService.PostAsync(
+                                Guid.NewGuid(),
+                                new() { DeleteIds = [item.Id] },
+                                c
+                            );
+                        }),
+                        null,
+                        DialogButtonType.Primary
+                    ),
+                    dialogService.CancelButton
                 );
             }
         );

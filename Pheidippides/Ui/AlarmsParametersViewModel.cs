@@ -16,9 +16,9 @@ public sealed partial class AlarmsParametersViewModel : ParametersViewModelBase
         AlarmNotify item,
         ValidationMode validationMode,
         bool isShowEdit,
-        ISafeExecuteWrapper safeExecuteWrapper
+        ViewModelServices services
     )
-        : base(validationMode, isShowEdit, safeExecuteWrapper)
+        : base(validationMode, isShowEdit, services)
     {
         DueDate = item.DueDateTime.LocalDateTime;
         DueTime = item.DueDateTime.TimeOfDay;
@@ -29,9 +29,9 @@ public sealed partial class AlarmsParametersViewModel : ParametersViewModelBase
     public AlarmsParametersViewModel(
         ValidationMode validationMode,
         bool isShowEdit,
-        ISafeExecuteWrapper safeExecuteWrapper
+        ViewModelServices services
     )
-        : base(validationMode, isShowEdit, safeExecuteWrapper)
+        : base(validationMode, isShowEdit, services)
     {
         var now = DateTime.Now;
         Name = string.Empty;

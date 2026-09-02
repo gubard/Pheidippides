@@ -19,10 +19,10 @@ public sealed class AlarmsViewModel : ViewModelBase, IHeader, IInit, ISave
         IAlarmUiCache alarmUiCache,
         IPheidippidesViewModelFactory factory,
         IObjectStorage objectStorage,
-        ISafeExecuteWrapper safeExecuteWrapper,
+        ViewModelServices services,
         PheidippidesCommands pheidippidesCommands
     )
-        : base(safeExecuteWrapper)
+        : base(services)
     {
         _objectStorage = objectStorage;
         PheidippidesCommands = pheidippidesCommands;

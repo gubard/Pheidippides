@@ -105,43 +105,38 @@ public sealed class DefaultAlarmScheduler : IAlarmScheduler, IDisposable
             [
                 _soundPlayer.PlayAsync(_soundData, true, cts.Token),
                 _dialogService.ShowMessageBoxAsync(
-                    new(
-                        _appResourceService
-                            .GetResource<string>("Lang.Alarm")
-                            .DispatchToDialogHeader(),
-                        item.Name,
-                        _safeExecuteWrapper,
-                        new DialogButton(
-                            _appResourceService.GetResource<string>("Lang.Ok"),
-                            _commandFactory.CreateCommand(async c =>
-                            {
-                                await cts.CancelAsync();
-                                await _dialogService.CloseMessageBoxAsync(c);
+                    _appResourceService.GetResource<string>("Lang.Alarm").DispatchToDialogHeader(),
+                    item.Name,
+                    ct,
+                    new DialogButton(
+                        _appResourceService.GetResource<string>("Lang.Ok"),
+                        _commandFactory.CreateCommand(async c =>
+                        {
+                            await cts.CancelAsync();
+                            await _dialogService.CloseMessageBoxAsync(c);
 
-                                await DiHelper
-                                    .ServiceProvider.GetService<IAlarmUiService>()
-                                    .PostAsync(
-                                        Guid.NewGuid(),
-                                        new()
-                                        {
-                                            Edits =
-                                            [
-                                                new()
-                                                {
-                                                    Ids = [item.Id],
-                                                    IsCompleted = true,
-                                                    IsEditIsCompleted = true,
-                                                },
-                                            ],
-                                        },
-                                        c
-                                    );
-                            }),
-                            null,
-                            DialogButtonType.Primary
-                        )
-                    ),
-                    ct
+                            await DiHelper
+                                .ServiceProvider.GetService<IAlarmUiService>()
+                                .PostAsync(
+                                    Guid.NewGuid(),
+                                    new()
+                                    {
+                                        Edits =
+                                        [
+                                            new()
+                                            {
+                                                Ids = [item.Id],
+                                                IsCompleted = true,
+                                                IsEditIsCompleted = true,
+                                            },
+                                        ],
+                                    },
+                                    c
+                                );
+                        }),
+                        null,
+                        DialogButtonType.Primary
+                    )
                 ),
             ],
             ct

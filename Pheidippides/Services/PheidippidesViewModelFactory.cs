@@ -28,20 +28,20 @@ public sealed class PheidippidesViewModelFactory : IPheidippidesViewModelFactory
             item,
             ValidationMode.ValidateAll,
             false,
-            _serviceProvider.GetService<ISafeExecuteWrapper>()
+            _serviceProvider.GetService<ViewModelServices>()
         );
     }
 
     public AlarmsParametersViewModel CreateAlarmsParameters(ValidationMode mode, bool isShowEdit)
     {
-        return new(mode, isShowEdit, _serviceProvider.GetService<ISafeExecuteWrapper>());
+        return new(mode, isShowEdit, _serviceProvider.GetService<ViewModelServices>());
     }
 
     public AlarmListViewModel CreateAlarmList(IAvaloniaReadOnlyList<AlarmNotify> alarms)
     {
         return new(
             alarms,
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
+            _serviceProvider.GetService<ViewModelServices>(),
             _serviceProvider.GetService<PheidippidesCommands>()
         );
     }
@@ -53,7 +53,7 @@ public sealed class PheidippidesViewModelFactory : IPheidippidesViewModelFactory
             _serviceProvider.GetService<IAlarmUiCache>(),
             this,
             _serviceProvider.GetService<IObjectStorage>(),
-            _serviceProvider.GetService<ISafeExecuteWrapper>(),
+            _serviceProvider.GetService<ViewModelServices>(),
             _serviceProvider.GetService<PheidippidesCommands>()
         );
     }
